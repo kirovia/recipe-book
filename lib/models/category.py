@@ -5,7 +5,8 @@ class Category:
 
     all = {}
 
-    def __init__(self, name):
+    def __init__(self, name, id = None):
+        self.id = id
         self.name = name
 
     @property
@@ -33,3 +34,47 @@ class Category:
         sql = """DROP TABLE IF EXISTS categories"""
         CURSOR.execute(sql)
         CONN.commit()
+
+    def save(self):
+        sql = """INSERT INTO categories (name) VALUES (?)"""
+        CURSOR.execute(sql, (self.name,))
+        CONN.commit()
+        self.id = CURSOR.lastrowid
+        type(self).all[self.id] = self
+
+    @classmethod
+    def create(cls, name):
+        category = cls(name)
+        category.save()
+        return category
+    
+    def delete(self):
+        sql = """DELETE FROM categories WHERE id = ?"""
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+        del type(self).all[self.id]
+        self.id = None
+
+    @classmethod
+    def get_all(cls):
+        sql = """SELECT * FROM categories"""
+        rows = CURSOR.execute(sql).fetchall()
+        return [cls.instance_from_db(row) for row in rows]
+
+    @classmethod
+    def find_by_id(cls, id):
+        sql = """SELECT * FROM categories WHERE id = ?"""
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+    
+    @classmethod
+    def instance_from_db(cls, row):
+        category = cls.all.get(row[0])
+        if category:
+            category.name = row[1]
+        else:
+            category = cls(row[1])
+            category.id = row[0]
+            cls.all[category.id] = category
+        return category
+    
