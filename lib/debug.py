@@ -6,5 +6,9 @@ import ipdb
 from models.category import Category
 from models.recipe import Recipe
 
+Category.drop_table()
+Recipe.drop_table()
+Category.create_table()
+Recipe.create_table()
 
 ipdb.set_trace()

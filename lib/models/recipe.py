@@ -18,7 +18,7 @@ class Recipe:
             self._category = category
         else:
             print('Recipe category must be an instance of the Category class')
-            
+
     @property
     def name(self):
         return self._name
@@ -29,3 +29,20 @@ class Recipe:
             self._name = name
         else:
             print('Recipe name must be a string between 1-50 characters in length')
+
+    @classmethod
+    def create_table(cls):
+        sql = """CREATE TABLE IF NOT EXISTS recipes (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            category_id INTEGER,
+            FOREIGN KEY (category_id) REFERENCES categories(id))
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def drop_table(cls):
+        sql = """DROP TABLE IF EXISTS recipes"""
+        CURSOR.execute(sql)
+        CONN.commit()
