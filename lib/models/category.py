@@ -18,7 +18,7 @@ class Category:
         if type(name) is str and len(name) in range(1, 25, 1):
             self._name = name
         else:
-            print('Category name must be a string between 1-25 characters in length')
+            raise ValueError('Category name must be between 1-25 characters in length\nPlease try again')
 
     @classmethod
     def create_table(cls):
@@ -68,6 +68,12 @@ class Category:
         return cls.instance_from_db(row) if row else None
     
     @classmethod
+    def find_by_name(cls, name):
+        sql = """SELECT * FROM categories WHERE name = ?"""
+        row = CURSOR.execute(sql, (name,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+
+    @classmethod
     def instance_from_db(cls, row):
         category = cls.all.get(row[0])
         if category:
@@ -77,4 +83,11 @@ class Category:
             category.id = row[0]
             cls.all[category.id] = category
         return category
+    
+    def recipes(self):
+        from models.recipe import Recipe
+        sql = """SELECT * FROM recipes WHERE category_id = ?"""
+        CURSOR.execute(sql, (self.id,))
+        rows = CURSOR.fetchall()
+        return [Recipe.instance_from_db(row) for row in rows]
     
