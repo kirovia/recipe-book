@@ -13,11 +13,9 @@ from helpers import (
     # view_recipe_category
 )
 
-
 def menu():
     print("\nWELCOME TO YOUR COOKBOOK!\n")
     view_all_categories()
-
 
 if __name__ == "__main__":
     menu()
