@@ -107,10 +107,8 @@ def delete_recipe(category_id):
     recipes = category.recipes()
     user_input = input('Type the recipe number to be deleted: ')
     if int(user_input) in range(len(recipes) + 1):
-        for i, recipe in enumerate(recipes, start=1):
-            if int(user_input) == i:
-                recipe.delete()
-                print(f'{recipe.name} successfully deleted!')
+        recipes[int(user_input) - 1].delete()
+        print(f'{recipes[int(user_input) - 1].name} successfully deleted!')
         view_all_recipes(category_id)
     else:
         print('\nInput not recognized, please try again\n')
