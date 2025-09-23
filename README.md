@@ -28,4 +28,4 @@ You can view, select, add, or delete recipes from the chapter using the followin
 
 If you encounter any errors or the program stops working, you can use CTRL + C to force exit the program
 
-Enjoy your new recipe catalog and bon appétit!
+## Enjoy your new recipe catalog and bon appétit!
